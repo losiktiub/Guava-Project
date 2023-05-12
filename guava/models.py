@@ -10,3 +10,6 @@ class guava(models.Model):
 
 class jambuguata(models.Model):
     pass
+
+class coba:
+    pass
