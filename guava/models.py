@@ -13,3 +13,6 @@ class jambuguata(models.Model):
 
 class coba:
     pass
+
+class coba2:
+    pass
