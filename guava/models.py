@@ -7,3 +7,6 @@ class jambu(models.Model):
 
 class guava(models.Model):
     pass
+
+class jambuguata(models.Model):
+    pass
