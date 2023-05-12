@@ -4,3 +4,6 @@ from django.db import models
 
 class jambu(models.Model):
     pass
+
+class guava(models.Model):
+    pass
