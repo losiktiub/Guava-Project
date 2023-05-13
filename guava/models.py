@@ -42,7 +42,7 @@ class detail_jual(models.Model):
 
 
 class komoditas(models.Model):
-    id_komoditas = models.CharField(primary_key=True)
+    id_komoditas = models.AutoField(primary_key=True)
     nama_komoditas = models.CharField(max_legth=50)
     satuan = models.IntegerField()
     kode_grade = models.CharField(max_legth=50)
