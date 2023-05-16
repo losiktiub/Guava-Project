@@ -24,7 +24,7 @@ class pembeli(models.Model):
 
 
 class penjualan(models.Model):
-    idpenjualan = models.AutoField(primary_key=True)
+    id_penjualan = models.AutoField(primary_key=True)
     idpembeli = models.ForeignKey(pembeli, on_delete=models.CASCADE)
     tanggalpenjualan = models.DateField()
 
@@ -32,7 +32,7 @@ class penjualan(models.Model):
         return str(self.idpembeli)
 
 class produk(models.Model):
-    idproduk = models.AutoField(primary_key=True)
+    id_produk = models.AutoField(primary_key=True)
     namaproduk = models.CharField(max_length=15)
     satuanproduk = models.CharField(max_length=15)
     hargaproduk = models.IntegerField()
@@ -79,7 +79,7 @@ class transaksi_lain(models.Model):
         return str(self.id_transaksi)
     
 class detail_panen(models.Model):
-    iddetailpanen = models.AutoField(primary_key=True)
+    id_detailpanen = models.AutoField(primary_key=True)
     idpanen = models.ForeignKey(panen, on_delete=models.CASCADE)
     idkomoditas= models.ForeignKey(komoditas, on_delete=models.CASCADE)
     jumlahpanen = models.IntegerField()
