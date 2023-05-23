@@ -171,3 +171,4 @@ def create_transaksi_lain(request):
         )
         new_transaksi_lain.save()
         return redirect("transaksi_lain")
+    
