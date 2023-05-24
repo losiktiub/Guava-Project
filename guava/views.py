@@ -27,7 +27,7 @@ def create_produk(request):
           return redirect('produk')
 
 def update_produk(request,id):
-     produkobj = models.produk.objects.get(idobat=id)
+     produkobj = models.produk.objects.get(id_produk=id)
      if request.method == "GET":
           return render(request, 'update produk.html', {
                'produkobj' : produkobj
@@ -108,7 +108,7 @@ def create_mitra(request):
     if request.method == "GET":
         return render(request, 'createmitra.html')
     else:
-        nama_mitra = request.POST["nama_siswa"]
+        nama_mitra = request.POST["nama_mitra"]
         alamat_mitra = request.POST["alamat_mitra"]
         nomor_mitra = request.POST["nomor_mitra"]
         tanggal_mulai_mitra = request.POST["tanggal_mulai_mitra"]

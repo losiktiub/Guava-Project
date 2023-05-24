@@ -52,9 +52,9 @@ class detail_jual(models.Model):
 
 class komoditas(models.Model):
     id_komoditas = models.AutoField(primary_key=True)
-    nama_komoditas = models.CharField(max_legth=50)
+    nama_komoditas = models.CharField(max_length=50)
     satuan = models.IntegerField()
-    kode_grade = models.CharField(max_legth=50)
+    kode_grade = models.CharField(max_length=50)
     harga_sewa = models.IntegerField()
 
     def _str_(self):
