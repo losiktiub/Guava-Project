@@ -3,9 +3,6 @@ from django.shortcuts import render,redirect
 from . import models
 from weasyprint import HTML
 import datetime
-from django.shortcuts import render, redirect
-from . import models
-from weasyprint import HTML
 # Create your views here.
 
 def produk(request):
