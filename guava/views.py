@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 from . import models
 from weasyprint import HTML
+import datetime
 # Create your views here.
 
 def produk(request):
@@ -218,7 +219,6 @@ def create_detail_jual(request):
 
         return redirect('detailjual')
 
-
 def update_detail_jual(request,id):
     detailjualobj = models.detail_jual.objects.get(id_detailjual=id)
     allpenjualanobj = models.penjualan.objects.all()
@@ -263,3 +263,160 @@ def create_transaksi_lain(request):
         )
         new_transaksi_lain.save()
         return redirect("transaksi_lain")
+    
+def update_transaksi_lain(request, id):
+    transaksi_lain_all = models.transaksi_lain.objects.get(id_transaksi = id)
+    if request.method == "GET":
+        return render(request, "form_update_transaksi_lain.html",{
+            'panen' : transaksi_lain_all})
+    else :
+        jenis_transaksi = request.POST["jenis_transaksi"]
+        tanggal_transaksi = request.POST["tanggal_transaksi"]
+        biaya = request.POST["biaya.html"]
+        transaksi_lain_all.jenis_transaksi = jenis_transaksi
+        transaksi_lain_all.tanggal_transaksi = tanggal_transaksi
+        transaksi_lain_all.biaya = biaya
+        transaksi_lain_all.save()
+        return redirect('transaksi_lain')
+
+def delete_transaksi_lain():
+    transaksi_lain_all = models.transaksi_lain.get(id_transaksi=id)
+    transaksi_lain_all.delete()
+    return redirect('transaksi_lain')
+
+def delete_panen():
+    panen_obj = models.panen.objects.get(id_panen = id)
+    panen_obj.delete()
+    return redirect('panen')
+   
+def panen(request):
+    allpanenobj = models.panen.objects.all()
+    return render(request, 'panen.html', {"allpanenobj" : allpanenobj})
+
+def create_panen(request):
+    if request.method == 'GET':
+        allmitraobj = models.mitra.objects.all()
+        return render (request, "form_create_panen.html",{})
+    if request.method == "POST":
+        id_mitra = request.POST["id_mitra"]
+        allmitraobj = models.mitra.objects.get(id_mitra)
+        biaya_pembelian = request.POST["biaya_pembelian"]
+        tanggal_panen = models.POST["tanggal_panen"]
+
+        newpanen = models.panen(
+            idmitra = allmitraobj,
+            biaya_pembelian = biaya_pembelian,
+            tanggal_panen = tanggal_panen
+        )
+        newpanen.save()
+
+        return redirect('panen')
+
+def update_panen(request, id):
+    panen_obj = models.panen.objects.get(id_panen = id)
+    if request.method == "GET":
+        return render(request, "form_update_panen.html",{
+            'panen' : panen_obj})
+    else :
+        id_mitra = request.POST['id_mitra']
+        biaya_pembelian = request.POST['biaya_pembelian']
+        tanggal_panen = request.POST['tanggal_panen']
+        panen_obj.id_mitra = id_mitra
+        panen_obj.biaya_pembelian = biaya_pembelian
+        panen_obj.tanggal_panen = tanggal_panen
+        panen_obj.save()
+        return redirect('panen')
+
+def delete_panen():
+    panen_obj = models.panen.objects.get(id_panen = id)
+    panen_obj.delete()
+    return redirect('panen')
+
+def penjualan(request):
+    penjualanobj = models.penjualan.object.all()
+    return render (request, 'penjualan.html',{
+        'allpenjualan' : penjualanobj
+    })
+
+def createpenjualan(request,id):
+    if request.method == "GET":
+        filterpembeliobj = models.pembeli.object.filter(id_pembeli = id)
+        return render (request, 'penjualan.html',{
+            'datapembeli' : filterpembeliobj
+        })
+    elif request.method == 'POST':
+        nama_pembeli = request.POST['nama_pembeli']
+        nomor_pembeli = request.POST['nomor_pembeli']
+        alamat_pembeli = request.POST['alamat_pembeli']
+
+        total_penjualan = models.pembeli.object.all().count()
+        newpembeli = models.pembeli(
+            nama_pembeli = nama_pembeli,
+            nomor_pembeli = nomor_pembeli,
+            alamat_pembeli = alamat_pembeli
+        ).save()
+        pembeliobj = models.pembeli.all().last()
+        newpenjualan = models.penjualan(
+            tanggalpenjualan = tanggalpenjualan
+        ).save()
+        return redirect('penjualan')
+
+def updatepenjualan(request,id):
+    penjualanobj = models.penjualan.get(id_penjualan = id)
+    if request.method == 'GET':
+        return render(request, 'updatepenjualan.html',{
+            'penjualanobj' : penjualanobj
+        })
+    else:
+        tanggalpenjualan = request.POST['tanggalpenjualan']
+        penjualanobj.tanggalpenjualan = tanggalpenjualan
+        penjualanobj.save()
+        return redirect ('penjualan')
+
+def deletepenjualan(request, id):
+    penjualanobj = models.penjualan.objects.get(id_penjualan = id)
+    penjualanobj.delete()
+    return redirect ('penjualan')
+
+def komoditas(request):
+    komoditasobj = models.komoditas.objects.all()
+    return render(request, 'komoditas.html', {
+        'komiditasobj' : komoditasobj
+    })
+
+def create_komoditas(request):
+    if request.method == "GET":
+        return render(request, 'createkomoditas.html')
+    else:
+        nama_komoditas = request.POST["namakomoditas"]
+        satuan = request.POST["satuan"]
+        kode_grade = request.POST["kodegrade"]
+        harga_sewa = request.POST["hargasewa"]
+
+        newkomoditas = models.komoditas(
+            nama_komoditas = nama_komoditas,
+            satuan = satuan,
+            kode_grade = kode_grade,
+            harga_sewa = harga_sewa,
+        )
+        newkomoditas.save()
+        return redirect('komoditas')
+
+def updatekomoditas(request, id):
+    komoditasobj = models.komoditas.objects.get(idkomoditas = id)
+    if request.method == "GET":
+        return render(request, 'updatekomoditas.html', {
+            'allkomoditas' : komoditasobj,
+        })
+    else:
+        komoditasobj.namakomoditas = request.POST['namakomoditas']
+        komoditasobj.satuan = request.POST["satuan"]
+        komoditasobj.kodegrade = request.POST['kodegrade']
+        komoditasobj.hargasewa = request.POST['hargasewa']
+        komoditasobj.save()
+        return redirect('komoditas')
+
+def deletekomoditas(request,id):
+    komoditasobj = models.komoditas.objects.get(idkomoditas = id)
+    komoditasobj.delete()
+    return redirect('komoditas')
