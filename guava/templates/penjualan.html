@@ -391,23 +391,21 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>ID Pembeli</th>
+                                            <th>ID Penjualan</th>
                                             <th>Nama Pembeli</th>
-                                            <th>Nomor Pembeli</th>
-                                            <th>Alamat Pembeli</th>
+                                            <th>Tanggal Penjualan</th>
                                             <th>Action</th>        
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in pembeliobj %}
                                         <tr>
-                                            <td>{{ item.id_pembeli  }}</td>
+                                            <td>{{ item.id_penjualan  }}</td>
                                             <td>{{ item.nama_pembeli  }}</td>
-                                            <td>{{ item.nomor_pembeli }}</td>
-                                            <td>{{ item.alamat_pembeli }}</td>
+                                            <td>{{ item.tanggalpenjualan}}</td>
                                             <td>
-                                                <a href="{% url 'updatepembeli' item.id_pembeli %}"><button class="btn btn-warning">Update</button></a>
-                                                <a href="{% url 'deletepembeli' item.id_pembeli %}"><button class="btn btn-danger">Delete</button></a>
+                                                <a href="{% url 'updatepembeli' item.id_penjualan %}"><button class="btn btn-warning">Update</button></a>
+                                                <a href="{% url 'deletepembeli' item.id_penjualan %}"><button class="btn btn-danger">Delete</button></a>
                                             </td>
                                         </tr>
                                         {% endfor %}
