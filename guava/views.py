@@ -4,8 +4,60 @@ from . import models
 from weasyprint import HTML
 import datetime
 from datetime import datetime
+from django.contrib.auth import login , logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.http import HttpResponse
+from django.contrib import messages
+from guava.decorators import role_required
 # Create your views here.
 
+@login_required
+def home(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginsiam.html')
+    else:
+        return render(request, 'mitra.html')
+
+    
+@login_required
+def logoutview(request):
+    logout(request)
+    messages.info(request,"Berhasil Logout")
+    return redirect('login')
+
+def loginview(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+    else:
+        return render(request,"loginsiam.html")
+    
+def performlogin(request):
+    if request.method != "POST":
+        return HttpResponse("Method not Allowed")
+    else:
+        print(request)
+        username_login = request.POST['username']
+        # print(username)
+        password_login = request.POST['password']
+        # print(username)
+        userobj = authenticate(request, username=username_login,password=password_login)
+        print(userobj)
+        if userobj is not None:
+            login(request, userobj)
+            messages.success(request,"Login success")
+            return redirect("home")
+        else:
+            messages.error(request,"Username atau Password salah !!!")
+            return redirect("login")
+        
+@login_required
+def performlogout(request):
+    logout(request)
+    print("Anda keluar")
+    return redirect("login")
+
+@login_required
 def produk(request):
     allprodukobj = models.produk.objects.all()
 
@@ -13,6 +65,7 @@ def produk(request):
         'allprodukobj' : allprodukobj,
         })
 
+@login_required
 def create_produk(request):
     if request.method == "GET" :
         return render(request, 'createproduk.html')
@@ -28,6 +81,7 @@ def create_produk(request):
         ).save()
         return redirect('produk')
 
+@login_required
 def update_produk(request,id):
     produkobj = models.produk.objects.get(id_produk=id)
     if request.method == "GET":
@@ -41,6 +95,7 @@ def update_produk(request,id):
         produkobj.save()
         return redirect('produk')
 
+@login_required
 def delete_produk(request, id):
     produkobj = models.produk.objects.get(id_produk=id)
     produkobj.delete()
@@ -54,6 +109,7 @@ def detail_panen(request):
         "getdetailobj" : getdetailobj,
     })
 
+@login_required
 def create_detailpanen(request):
     if request.method == "GET":
         allpanenobj = models.panen.objects.all()
@@ -95,17 +151,27 @@ def update_detailpanen(request,id):
         detailpanenobj.save()
         return redirect('detailpanen')
 
+@login_required
 def delete_detailpanen(request,id):
     detailpanenobj = models.detail_panen.objects.get(id_detailpanen=id)
     detailpanenobj.delete()
     return redirect('detailpanen')
 
+@login_required
+@role_required(allowed_roles=['Admin', 'Pegawai'])
 def mitra(request):
     mitraobj = models.mitra.objects.all()
+    # is_admin = request.user.groups.filter(name='Admin').exists()
+    # is_pegawai = request.user.groups.filter(name='Pegawai').exists()
+
     return render(request, 'mitra.html', {
         'mitraobj' : mitraobj,
+        'is_admin': request.is_admin,
+        'is_editor': request.is_pegawai
     })
 
+@login_required
+@role_required(allowed_roles=['Admin'])
 def create_mitra(request):
     if request.method == "GET":
         return render(request, 'createmitra.html')
@@ -128,6 +194,7 @@ def create_mitra(request):
         newmitra.save()
         return redirect('mitra')
 
+@login_required
 def update_mitra(request,id):
     mitraobj = models.mitra.objects.get(id_mitra = id)
     if request.method == "GET" :
@@ -146,6 +213,7 @@ def update_mitra(request,id):
         mitraobj.save()
         return redirect('mitra')
 
+@login_required
 def delete_mitra(request,id):
     mitraobj = models.mitra.objects.get(id_mitra = id)
     mitraobj.delete()
@@ -157,6 +225,7 @@ def pembeli(request):
         'pembeliobj' : pembeliobj,
     })
 
+@login_required
 def create_pembeli(request):
     if request.method == "GET":
         return render(request, 'createpembeli.html')
@@ -173,6 +242,7 @@ def create_pembeli(request):
         newpembeli.save()
         return redirect('pembeli')
 
+@login_required
 def update_pembeli(request,id):
     pembeliobj = models.pembeli.objects.get(id_pembeli=id)
     if request.method == "GET" :
@@ -186,11 +256,13 @@ def update_pembeli(request,id):
         pembeliobj.save()
         return redirect('pembeli')
 
+@login_required
 def delete_pembeli(request,id):
     pembeliobj = models.pembeli.objects.get(id_pembeli=id)
     pembeliobj.delete()
     return redirect('pembeli')
 
+@login_required
 def detail_jual(request):
     alldetailjualobj = models.detail_jual.objects.all()
     getdetailobj = models.detail_jual.objects.get(id_detailjual=1)
@@ -199,6 +271,7 @@ def detail_jual(request):
         "getdetailobj" : getdetailobj,
     })
 
+@login_required
 def create_detail_jual(request):
     if request.method == "GET":
         allpenjualanobj = models.penjualan.objects.all()
@@ -222,6 +295,7 @@ def create_detail_jual(request):
 
         return redirect('detailjual')
 
+@login_required
 def update_detail_jual(request,id):
     detailjualobj = models.detail_jual.objects.get(id_detailjual=id)
     allpenjualanobj = models.penjualan.objects.all()
@@ -239,11 +313,13 @@ def update_detail_jual(request,id):
         detailjualobj.save()
         return redirect('detailjual')
 
+@login_required
 def delete_detail_jual(request,id):
     detailjualobj = models.detail_jual.objects.get(id_detailjual=id)
     detailjualobj.delete()
     return redirect('detailjual')
 
+@login_required
 def transaksi_lain(request):
     transaksi_lain_all = models.transaksi_lain.objects.all()
     
@@ -251,6 +327,7 @@ def transaksi_lain(request):
         'transaksi_lain_all' : transaksi_lain_all
     })
 
+@login_required
 def create_transaksi_lain(request):
     if request.method == "GET":
         return render (request, "form_create_transaksi_lain.html")
@@ -267,6 +344,7 @@ def create_transaksi_lain(request):
         new_transaksi_lain.save()
         return redirect("transaksi_lain")
     
+@login_required
 def update_transaksi_lain(request, id):
     transaksi_lain_all = models.transaksi_lain.objects.get(id_transaksi = id)
     if request.method == "GET":
@@ -281,21 +359,25 @@ def update_transaksi_lain(request, id):
         transaksi_lain_all.biaya = biaya
         transaksi_lain_all.save()
         return redirect('transaksi_lain')
-
+    
+@login_required
 def delete_transaksi_lain():
     transaksi_lain_all = models.transaksi_lain.get(id_transaksi=id)
     transaksi_lain_all.delete()
     return redirect('transaksi_lain')
 
+@login_required
 def delete_panen():
     panen_obj = models.panen.objects.get(id_panen = id)
     panen_obj.delete()
     return redirect('panen')
-   
+
+@login_required
 def panen(request):
     allpanenobj = models.panen.objects.all()
     return render(request, 'panen.html', {"allpanenobj" : allpanenobj})
 
+@login_required
 def create_panen(request):
     if request.method == 'GET':
         allmitraobj = models.mitra.objects.all()
@@ -315,6 +397,7 @@ def create_panen(request):
 
         return redirect('panen')
 
+@login_required
 def update_panen(request, id):
     panen_obj = models.panen.objects.get(id_panen = id)
     if request.method == "GET":
@@ -330,17 +413,20 @@ def update_panen(request, id):
         panen_obj.save()
         return redirect('panen')
 
+@login_required
 def delete_panen():
     panen_obj = models.panen.objects.get(id_panen = id)
     panen_obj.delete()
     return redirect('panen')
 
+@login_required
 def penjualan(request):
     penjualanobj = models.penjualan.object.all()
     return render (request, 'penjualan.html',{
         'allpenjualan' : penjualanobj
     })
 
+@login_required
 def createpenjualan(request,id):
     if request.method == "GET":
         filterpembeliobj = models.pembeli.object.filter(id_pembeli = id)
@@ -364,6 +450,7 @@ def createpenjualan(request,id):
         # ).save()
         return redirect('penjualan')
 
+@login_required
 def updatepenjualan(request,id):
     penjualanobj = models.penjualan.get(id_penjualan = id)
     if request.method == 'GET':
@@ -376,17 +463,20 @@ def updatepenjualan(request,id):
         penjualanobj.save()
         return redirect ('penjualan')
 
+@login_required
 def deletepenjualan(request, id):
     penjualanobj = models.penjualan.objects.get(id_penjualan = id)
     penjualanobj.delete()
     return redirect ('penjualan')
 
+@login_required
 def komoditas(request):
     komoditasobj = models.komoditas.objects.all()
     return render(request, 'komoditas.html', {
         'komiditasobj' : komoditasobj
     })
 
+@login_required
 def create_komoditas(request):
     if request.method == "GET":
         return render(request, 'createkomoditas.html')
@@ -405,6 +495,7 @@ def create_komoditas(request):
         newkomoditas.save()
         return redirect('komoditas')
 
+@login_required
 def updatekomoditas(request, id):
     komoditasobj = models.komoditas.objects.get(idkomoditas = id)
     if request.method == "GET":
@@ -419,6 +510,7 @@ def updatekomoditas(request, id):
         komoditasobj.save()
         return redirect('komoditas')
 
+@login_required
 def deletekomoditas(request,id):
     komoditasobj = models.komoditas.objects.get(idkomoditas = id)
     komoditasobj.delete()

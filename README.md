@@ -7,6 +7,14 @@ Superuser account
 username : losik
 password : losik
 ```
+
+staff account
+
+username = akunfaiqul
+password = faiqul123
+
+username = akunmarom
+password = marom123
 # MOHON DIBACA RULES PENGERJAAN
 ## Untuk inisiasi awal
 ```
