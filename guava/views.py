@@ -61,14 +61,14 @@ def performlogout(request):
 def produk(request):
     allprodukobj = models.produk.objects.all()
 
-    return render (request, 'produk.html',{
+    return render (request, 'produk/produk.html',{
         'allprodukobj' : allprodukobj,
         })
 
 @login_required
 def create_produk(request):
     if request.method == "GET" :
-        return render(request, 'createproduk.html')
+        return render(request, 'produk/createproduk.html')
     else:
         nama_produk = request.POST['namaproduk']
         satuan_produk = request.POST['satuanproduk']
@@ -85,7 +85,7 @@ def create_produk(request):
 def update_produk(request,id):
     produkobj = models.produk.objects.get(id_produk=id)
     if request.method == "GET":
-        return render(request, 'updateproduk.html', {
+        return render(request, 'produk/updateproduk.html', {
             'produkobj' : produkobj
             })
     else:
@@ -164,7 +164,7 @@ def mitra(request):
     # is_admin = request.user.groups.filter(name='Admin').exists()
     # is_pegawai = request.user.groups.filter(name='Pegawai').exists()
 
-    return render(request, 'mitra.html', {
+    return render(request, 'mitra/mitra.html', {
         'mitraobj' : mitraobj,
         'is_admin': request.is_admin,
         'is_editor': request.is_pegawai
@@ -174,7 +174,7 @@ def mitra(request):
 @role_required(allowed_roles=['Admin'])
 def create_mitra(request):
     if request.method == "GET":
-        return render(request, 'createmitra.html')
+        return render(request, 'mitra/createmitra.html')
     else:
         nama_mitra = request.POST["nama_mitra"]
         alamat_mitra = request.POST["alamat_mitra"]
@@ -199,7 +199,7 @@ def update_mitra(request,id):
     mitraobj = models.mitra.objects.get(id_mitra = id)
     if request.method == "GET" :
         tanggal = datetime.strftime(mitraobj.tanggal_mulai_mitra, '%Y-%m-%d')
-        return render(request, 'updatemitra.html', {
+        return render(request, 'mitra/updatemitra.html', {
             'mitraobj' : mitraobj,
             'tanggal' : tanggal
         })
@@ -221,14 +221,14 @@ def delete_mitra(request,id):
 
 def pembeli(request):
     pembeliobj = models.pembeli.objects.all()
-    return render(request, 'pembeli.html', {
+    return render(request, 'pembeli/pembeli.html', {
         'pembeliobj' : pembeliobj,
     })
 
 @login_required
 def create_pembeli(request):
     if request.method == "GET":
-        return render(request, 'createpembeli.html')
+        return render(request, 'pembeli/createpembeli.html')
     else:
         nama_pembeli = request.POST["nama_pembeli"]
         nomor_pembeli = request.POST["nomor_pembeli"]
@@ -246,7 +246,7 @@ def create_pembeli(request):
 def update_pembeli(request,id):
     pembeliobj = models.pembeli.objects.get(id_pembeli=id)
     if request.method == "GET" :
-        return render(request, 'updatepembeli.html', {
+        return render(request, 'pembeli/updatepembeli.html', {
             'pembeliobj' : pembeliobj,
         })
     else :
@@ -265,10 +265,10 @@ def delete_pembeli(request,id):
 @login_required
 def detail_jual(request):
     alldetailjualobj = models.detail_jual.objects.all()
-    getdetailobj = models.detail_jual.objects.get(id_detailjual=1)
-    return render(request, 'detailjual.html', {
+    # getdetailobj = models.detail_jual.objects.get(id_detailjual=1)
+    return render(request, 'detailjual/detailjual.html', {
         "alldetailjualobj" : alldetailjualobj,
-        "getdetailobj" : getdetailobj,
+        # "getdetailobj" : getdetailobj,
     })
 
 @login_required
@@ -276,24 +276,45 @@ def create_detail_jual(request):
     if request.method == "GET":
         allpenjualanobj = models.penjualan.objects.all()
         allprodukobj = models.produk.objects.all()
-        return render(request, 'createdetailpenjualan.html',{
-            'datapenjualan' : allpenjualanobj, 'dataproduk' : allprodukobj
-        })
-    if request.method == "POST":
-        id_penjualan = request.POST['id_penjualan']
-        allpenjualanobj = models.penjualan.objects.get(id_penjualan=id_penjualan)
-        id_produk = request.POST['id_produk']
-        allprodukobj = models.produk.objects.get(id_produk=id_produk)
-        jumlah = request.POST["jumlah"]
+        return render(request, 'detailjual/createdetailjual.html', {
+            'datapenjualan': allpenjualanobj,
+            'dataproduk' : allprodukobj
+            })
 
-        newdetailjual = models.detail_jual(
-            id_penjualan = allpenjualanobj,
-            id_produk = allprodukobj,
+    elif request.method == "POST":
+        id_penjualan = request.POST['id_penjualan']
+        id_produk= request.POST['id_produk']
+        jumlah = request.POST['jumlah']
+
+        newdetailjual = models.detail_jual.objects.create(
+            id_penjualan_id=id_penjualan,
+            id_produk_id = id_produk,
             jumlah = jumlah
         )
-        newdetailjual.save()
 
         return redirect('detailjual')
+# def create_detail_jual(request):
+#     if request.method == "GET":
+#         allpenjualanobj = models.penjualan.objects.all()
+#         allprodukobj = models.produk.objects.all()
+#         return render(request, 'detailjual/createdetailjual.html',{
+#             'datapenjualan' : allpenjualanobj, 'dataproduk' : allprodukobj
+#         })
+#     if request.method == "POST":
+#         id_penjualan = request.POST['id_penjualan']
+#         allpenjualanobj = models.penjualan.objects.get(id_penjualan=id_penjualan)
+#         id_produk = request.POST['id_produk']
+#         allprodukobj = models.produk.objects.get(id_produk=id_produk)
+#         jumlah = request.POST["jumlah"]
+
+#         newdetailjual = models.detail_jual(
+#             id_penjualan = allpenjualanobj,
+#             id_produk = allprodukobj,
+#             jumlah = jumlah
+#         )
+#         newdetailjual.save()
+
+#         return redirect('detailjual')
 
 @login_required
 def update_detail_jual(request,id):
@@ -301,12 +322,16 @@ def update_detail_jual(request,id):
     allpenjualanobj = models.penjualan.objects.all()
     allprodukobj = models.produk.objects.all()
     if request.method == "GET" :
-        return render(request, 'updatedetailjual.html', {
-            'alldetailjual' : detailjualobj, 'datapenjualan' : allpenjualanobj, 'dataproduk' : allprodukobj,
+        return render(request, 'detailjual/updatedetailjual.html', {
+            'detailjualobj' : detailjualobj, 
+            'datapenjualan' : allpenjualanobj,
+            'dataproduk' : allprodukobj,
         })
     else :
-        getidpenjualan = models.penjualan.objects.get(id_penjualan = request.POST['id_penjualan']) 
-        getidproduk = models.produk.objects.get(id_produk = request.POST['id_produk'])
+        id_penjualan = request.POST['id_penjualan']
+        id_produk = request.POST['id_produk']
+        getidpenjualan = models.penjualan.objects.get(id_penjualan = id_penjualan   ) 
+        getidproduk = models.produk.objects.get(id_produk = id_produk)
         detailjualobj.jumlah = request.POST['jumlah']
         detailjualobj.id_penjualan = getidpenjualan
         detailjualobj.id_produk = getidproduk
@@ -375,42 +400,69 @@ def delete_panen():
 @login_required
 def panen(request):
     allpanenobj = models.panen.objects.all()
-    return render(request, 'panen.html', {"allpanenobj" : allpanenobj})
+    return render(request, 'panen/panen.html', {
+        "allpanenobj" : allpanenobj
+        })
 
 @login_required
 def create_panen(request):
     if request.method == 'GET':
         allmitraobj = models.mitra.objects.all()
-        return render (request, "form_create_panen.html",{})
-    if request.method == "POST":
-        id_mitra = request.POST["id_mitra"]
-        allmitraobj = models.mitra.objects.get(id_mitra)
-        biaya_pembelian = request.POST["biaya_pembelian"]
-        tanggal_panen = models.POST["tanggal_panen"]
+        return render(request, 'panen/createpanen.html', {
+            'datamitra': allmitraobj
+        })
 
-        newpanen = models.panen(
-            idmitra = allmitraobj,
-            biaya_pembelian = biaya_pembelian,
-            tanggal_panen = tanggal_panen
+    elif request.method == "POST":
+        id_mitra = request.POST["id_mitra"]
+        biaya_pembelian = request.POST["biaya_pembelian"]
+
+        tanggal_panen= request.POST["tanggal_panen"]
+
+        newpanen = models.panen.objects.create(
+            id_mitra_id=id_mitra,
+            biaya_pembelian=biaya_pembelian,
+            tanggal_panen=tanggal_panen
         )
-        newpanen.save()
 
         return redirect('panen')
 
+# def create_panen(request):
+#     if request.method == 'GET':
+#         allmitraobj = models.mitra.objects.all()
+#         return render (request, "panen/createpanen.html",{})
+#     if request.method == "POST":
+#         id_mitra = request.POST["id_mitra"]
+#         allmitraobj = models.mitra.objects.get(id_mitra)
+#         biaya_pembelian = request.POST["biaya_pembelian"]
+#         tanggal_panen = models.POST["tanggal_panen"]
+
+#         newpanen = models.panen(
+#             idmitra = allmitraobj,
+#             biaya_pembelian = biaya_pembelian,
+#             tanggal_panen = tanggal_panen
+#         )
+#         newpanen.save()
+
+#         return redirect('panen')
+
 @login_required
 def update_panen(request, id):
-    panen_obj = models.panen.objects.get(id_panen = id)
+    panenobj = models.panen.objects.get(id_panen = id)
     if request.method == "GET":
-        return render(request, "form_update_panen.html",{
-            'panen' : panen_obj})
+        allmitraobj = models.mitra.objects.all()
+        tanggal = datetime.strftime(panenobj.tanggal_panen, '%Y-%m-%d')
+        return render(request, "panen/updatepanen.html",{
+            'panenobj' : panenobj,
+            'datamitra' : allmitraobj,
+            'tanggal' : tanggal
+            })
     else :
         id_mitra = request.POST['id_mitra']
-        biaya_pembelian = request.POST['biaya_pembelian']
-        tanggal_panen = request.POST['tanggal_panen']
-        panen_obj.id_mitra = id_mitra
-        panen_obj.biaya_pembelian = biaya_pembelian
-        panen_obj.tanggal_panen = tanggal_panen
-        panen_obj.save()
+        getidmitra = models.mitra.objects.get(id_mitra=id_mitra)
+        panenobj.biaya_pembelian = request.POST['biaya_pembelian']
+        panenobj.tanggal_panen = request.POST['tanggal_panen']
+        panenobj.id_mitra = getidmitra
+        panenobj.save()
         return redirect('panen')
 
 @login_required
@@ -421,47 +473,101 @@ def delete_panen():
 
 @login_required
 def penjualan(request):
-    penjualanobj = models.penjualan.object.all()
-    return render (request, 'penjualan.html',{
-        'allpenjualan' : penjualanobj
+    penjualanobj = models.penjualan.objects.all()
+    return render (request, 'penjualan/penjualan.html',{
+        'penjualanobj' : penjualanobj
     })
 
 @login_required
-def createpenjualan(request,id):
+def create_penjualan(request):
     if request.method == "GET":
-        filterpembeliobj = models.pembeli.object.filter(id_pembeli = id)
-        return render (request, 'penjualan.html',{
-            'datapembeli' : filterpembeliobj
-        })
-    elif request.method == 'POST':
-        nama_pembeli = request.POST['nama_pembeli']
-        nomor_pembeli = request.POST['nomor_pembeli']
-        alamat_pembeli = request.POST['alamat_pembeli']
+        allpembeliobj = models.pembeli.objects.all()
+        return render(request, 'penjualan/createpenjualan.html', {
+            'datapembeli': allpembeliobj
+            })
 
-        total_penjualan = models.pembeli.object.all().count()
-        models.pembeli(
-            nama_pembeli = nama_pembeli,
-            nomor_pembeli = nomor_pembeli,
-            alamat_pembeli = alamat_pembeli
-        ).save()
-        pembeliobj = models.pembeli.all().last()
-        # newpenjualan = models.penjualan(
-        #     tanggalpenjualan = tanggalpenjualan
-        # ).save()
+    elif request.method == "POST":
+        idpembeli = request.POST['idpembeli']
+        tanggalpenjualan = request.POST['tanggalpenjualan']
+
+        newpenjualan = models.penjualan.objects.create(
+            idpembeli_id=idpembeli,
+            tanggalpenjualan=tanggalpenjualan
+        )
+
         return redirect('penjualan')
+# def create_penjualan(request):
+#     if request.method == "GET":
+#         allpembeliobj = models.pembeli.objects.all()
+#         return render(request, 'createpenjualan.html', {
+#             'datapembeli': allpembeliobj
+#             })
+#     elif request.method == 'POST':
+#         idpembeli = request.POST['idpembeli']
+#         getpembeliobj = models.pembeli.objects.get(id_pembeli = idpembeli)
+#         tanggalpenjualan = request.POST['tanggalpenjualan']
+
+#         newpenjualan =  models.penjualan(
+#             idpembeli = getpembeliobj,
+#             tanggalpenjualan = tanggalpenjualan
+#         )
+#         newpenjualan.save()
+#         return redirect('penjualan')
+
+
+# def createpenjualan(request,id):
+#     if request.method == "GET":
+#         filterpembeliobj = models.pembeli.object.filter(id_pembeli = id)
+#         return render (request, 'penjualan.html',{
+#             'datapembeli' : filterpembeliobj
+#         })
+#     elif request.method == 'POST':
+#         nama_pembeli = request.POST['nama_pembeli']
+#         nomor_pembeli = request.POST['nomor_pembeli']
+#         alamat_pembeli = request.POST['alamat_pembeli']
+
+#         total_penjualan = models.pembeli.object.all().count()
+#         models.pembeli(
+#             nama_pembeli = nama_pembeli,
+#             nomor_pembeli = nomor_pembeli,
+#             alamat_pembeli = alamat_pembeli
+#         ).save()
+#         pembeliobj = models.pembeli.all().last()
+#         # newpenjualan = models.penjualan(
+#         #     tanggalpenjualan = tanggalpenjualan
+#         # ).save()
+#         return redirect('penjualan')
 
 @login_required
 def updatepenjualan(request,id):
-    penjualanobj = models.penjualan.get(id_penjualan = id)
-    if request.method == 'GET':
-        return render(request, 'updatepenjualan.html',{
-            'penjualanobj' : penjualanobj
+    penjualanobj = models.penjualan.objects.get(id_penjualan=id)
+    if request.method == "GET":
+        allpembeliobj = models.pembeli.objects.all()
+        tanggal = datetime.strftime(penjualanobj.tanggalpenjualan, '%Y-%m-%d')
+        return render(request, 'penjualan/updatepenjualan.html', {
+            'penjualanobj' : penjualanobj,
+            'datapembeli' : allpembeliobj,
+            'tanggal' : tanggal
         })
     else:
-        tanggalpenjualan = request.POST['tanggalpenjualan']
-        penjualanobj.tanggalpenjualan = tanggalpenjualan
+        idpembeli = request.POST['idpembeli']
+        getidpembeli = models.pembeli.objects.get(id_pembeli=idpembeli)
+        penjualanobj.tanggalpenjualan = request.POST['tanggalpenjualan']
+        penjualanobj.idpembeli = getidpembeli
         penjualanobj.save()
-        return redirect ('penjualan')
+        return redirect('penjualan')
+        
+# def updatepenjualan(request,id):
+#     penjualanobj = models.penjualan.get(id_penjualan = id)
+#     if request.method == 'GET':
+#         return render(request, 'updatepenjualan.html',{
+#             'penjualanobj' : penjualanobj
+#         })
+#     else:
+#         tanggalpenjualan = request.POST['tanggalpenjualan']
+#         penjualanobj.tanggalpenjualan = tanggalpenjualan
+#         penjualanobj.save()
+#         return redirect ('penjualan')
 
 @login_required
 def deletepenjualan(request, id):
@@ -472,19 +578,19 @@ def deletepenjualan(request, id):
 @login_required
 def komoditas(request):
     komoditasobj = models.komoditas.objects.all()
-    return render(request, 'komoditas.html', {
-        'komiditasobj' : komoditasobj
+    return render(request, 'komoditas/komoditas.html', {
+        'komoditasobj' : komoditasobj
     })
 
 @login_required
 def create_komoditas(request):
     if request.method == "GET":
-        return render(request, 'createkomoditas.html')
+        return render(request, 'komoditas/createkomoditas.html')
     else:
-        nama_komoditas = request.POST["namakomoditas"]
+        nama_komoditas = request.POST["nama_komoditas"]
         satuan = request.POST["satuan"]
-        kode_grade = request.POST["kodegrade"]
-        harga_sewa = request.POST["hargasewa"]
+        kode_grade = request.POST["kode_grade"]
+        harga_sewa = request.POST["harga_sewa"]
 
         newkomoditas = models.komoditas(
             nama_komoditas = nama_komoditas,
@@ -497,21 +603,21 @@ def create_komoditas(request):
 
 @login_required
 def updatekomoditas(request, id):
-    komoditasobj = models.komoditas.objects.get(idkomoditas = id)
+    komoditasobj = models.komoditas.objects.get(id_komoditas = id)
     if request.method == "GET":
-        return render(request, 'updatekomoditas.html', {
-            'allkomoditas' : komoditasobj,
+        return render(request, 'komoditas/updatekomoditas.html', {
+            'komoditasobj' : komoditasobj,
         })
     else:
-        komoditasobj.namakomoditas = request.POST['namakomoditas']
+        komoditasobj.nama_komoditas = request.POST['nama_komoditas']
         komoditasobj.satuan = request.POST["satuan"]
-        komoditasobj.kodegrade = request.POST['kodegrade']
-        komoditasobj.hargasewa = request.POST['hargasewa']
+        komoditasobj.kode_grade = request.POST['kode_grade']
+        komoditasobj.harga_sewa = request.POST['harga_sewa']
         komoditasobj.save()
         return redirect('komoditas')
 
 @login_required
 def deletekomoditas(request,id):
-    komoditasobj = models.komoditas.objects.get(idkomoditas = id)
+    komoditasobj = models.komoditas.objects.get(id_komoditas = id)
     komoditasobj.delete()
     return redirect('komoditas')
