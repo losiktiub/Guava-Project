@@ -17,7 +17,7 @@ def home(request):
     if not request.user.is_authenticated:
         return render(request, 'loginsiam.html')
     else:
-        return render(request, 'mitra.html')
+        return render(request, 'mitra/mitra.html')
 
     
 @login_required
@@ -46,7 +46,7 @@ def performlogin(request):
         if userobj is not None:
             login(request, userobj)
             messages.success(request,"Login success")
-            return redirect("home")
+            return redirect("mitra")
         else:
             messages.error(request,"Username atau Password salah !!!")
             return redirect("login")
@@ -103,10 +103,8 @@ def delete_produk(request, id):
 
 def detail_panen(request):
     alldetailpanenobj = models.detail_panen.objects.all()
-    getdetailobj = models.detail_panen.objects.get(id_detailpanen=1)
-    return render(request, 'detail panen.html', {
+    return render(request, 'detailpanen/detailpanen.html', {
         "alldetailpanenobj" : alldetailpanenobj,
-        "getdetailobj" : getdetailobj,
     })
 
 @login_required
@@ -114,37 +112,41 @@ def create_detailpanen(request):
     if request.method == "GET":
         allpanenobj = models.panen.objects.all()
         allkomoditasobj = models.komoditas.objects.all()
-        return render(request, 'create detail panen.html',{
-            'datapanen' : allpanenobj, 'datakomoditas' : allkomoditasobj
+        return render(request, 'detailpanen/createdetailpanen.html',{
+            'datapanen' : allpanenobj,
+            'datakomoditas' : allkomoditasobj
         })
-    if request.method == "POST":
+    elif request.method == "POST":
         idpanen = request.POST['id_panen']
-        allpanenobj = models.panen.objects.get(id_panen=idpanen)
         id_komoditas = request.POST['id_komoditas']
-        allkomoditasobj = models.komoditas.objects.get(id_komoditas=id_komoditas)
         jumlahpanen = request.POST["jumlahpanen"]
         tanggalkadaluwarsa = request.POST["tanggalkadaluwarsa"]
 
-    models.detail_panen(
-            idpanen = allpanenobj,
-            id_komoditas = allkomoditasobj,
-            jumlahpanen = jumlahpanen,
-            tanggalkadaluwarsa = tanggalkadaluwarsa
-        ).save()
+        newdetailpanen = models.detail_panen.objects.create(
+            idpanen_id=idpanen,
+            idkomoditas_id=id_komoditas,
+            jumlahpanen=jumlahpanen,
+            tanggalkadaluwarsa=tanggalkadaluwarsa
+        )
 
-    return redirect('detailpanen')
+        return redirect('detailpanen')
+
 
 def update_detailpanen(request,id):
-    detailpanenobj = models.detail_panen.objects.get(id_detailjual=id)
+    detailpanenobj = models.detail_panen.objects.get(id_detailpanen=id)
     allpanenobj = models.panen.objects.all()
     allkomoditasobj = models.komoditas.objects.all()
     if request.method == "GET" :
-        return render(request, 'updatedetailpanen.html', {
-            'alldetailpanen' : detailpanenobj, 'datapanen' : allpanenobj, 'datakomoditas' : allkomoditasobj,
+        tanggal = datetime.strftime(detailpanenobj.tanggalkadaluwarsa, '%Y-%m-%d')
+        return render(request, 'detailpanen/updatedetailpanen.html', {
+            'alldetailpanen' : detailpanenobj, 
+            'datapanen' : allpanenobj,
+            'datakomoditas' : allkomoditasobj,
+            'tanggal' : tanggal
         })
     else :
-        getidpanen = models.panen.objects.get(idpanen = request.POST['id_panen']) 
-        getidkomoditas = models.komoditas.objects.get(id_komodiras= request.POST['id_komoditas'])
+        getidpanen = models.panen.objects.get(id_panen = request.POST['id_panen']) 
+        getidkomoditas = models.komoditas.objects.get(id_komodias= request.POST['id_komoditas'])
         detailpanenobj.jumlahpanen = request.POST['jumlahpanen']
         detailpanenobj.idpanen = getidpanen
         detailpanenobj.idkomoditas = getidkomoditas
@@ -287,7 +289,7 @@ def create_detail_jual(request):
         jumlah = request.POST['jumlah']
 
         newdetailjual = models.detail_jual.objects.create(
-            id_penjualan_id=id_penjualan,
+            id_penjualan_id = id_penjualan,
             id_produk_id = id_produk,
             jumlah = jumlah
         )
@@ -348,18 +350,18 @@ def delete_detail_jual(request,id):
 def transaksi_lain(request):
     transaksi_lain_all = models.transaksi_lain.objects.all()
     
-    return render(request, 'transaksi_lain.html',{
-        'transaksi_lain_all' : transaksi_lain_all
+    return render(request, 'transaksilain/transaksilain.html',{
+        'transaksilainobj' : transaksi_lain_all
     })
 
 @login_required
 def create_transaksi_lain(request):
     if request.method == "GET":
-        return render (request, "form_create_transaksi_lain.html")
+        return render (request, "transaksilain/createtransaksilain.html")
     else:
         jenis_transaksi = request.POST["jenis_transaksi"]
         tanggal_transaksi = request.POST["tanggal_transaksi"]
-        biaya = request.POST["biaya.html"]
+        biaya = request.POST["biaya"]
 
         new_transaksi_lain = models.transaksi_lain(
             jenis_transaksi = jenis_transaksi,
@@ -367,35 +369,33 @@ def create_transaksi_lain(request):
             biaya = biaya
         )
         new_transaksi_lain.save()
-        return redirect("transaksi_lain")
+        return redirect("transaksilain")
     
 @login_required
 def update_transaksi_lain(request, id):
     transaksi_lain_all = models.transaksi_lain.objects.get(id_transaksi = id)
     if request.method == "GET":
-        return render(request, "form_update_transaksi_lain.html",{
-            'panen' : transaksi_lain_all})
+        tangal = datetime.strftime(transaksi_lain_all.tanggal_transaksi, '%Y-%m-%d')
+        return render(request, "transaksilain/updatetransaksilain.html",{
+            'transaksilainobj' : transaksi_lain_all, 
+            'tanggal' : tangal
+            })
     else :
         jenis_transaksi = request.POST["jenis_transaksi"]
         tanggal_transaksi = request.POST["tanggal_transaksi"]
-        biaya = request.POST["biaya.html"]
+        biaya = request.POST["biaya"]
         transaksi_lain_all.jenis_transaksi = jenis_transaksi
         transaksi_lain_all.tanggal_transaksi = tanggal_transaksi
         transaksi_lain_all.biaya = biaya
         transaksi_lain_all.save()
-        return redirect('transaksi_lain')
+        return redirect('transaksilain')
     
 @login_required
-def delete_transaksi_lain():
-    transaksi_lain_all = models.transaksi_lain.get(id_transaksi=id)
+def delete_transaksi_lain(request,id):
+    transaksi_lain_all = models.transaksi_lain.objects.get(id_transaksi=id)
     transaksi_lain_all.delete()
-    return redirect('transaksi_lain')
+    return redirect('transaksilain')
 
-@login_required
-def delete_panen():
-    panen_obj = models.panen.objects.get(id_panen = id)
-    panen_obj.delete()
-    return redirect('panen')
 
 @login_required
 def panen(request):
@@ -466,7 +466,7 @@ def update_panen(request, id):
         return redirect('panen')
 
 @login_required
-def delete_panen():
+def delete_panen(request,id):
     panen_obj = models.panen.objects.get(id_panen = id)
     panen_obj.delete()
     return redirect('panen')
