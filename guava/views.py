@@ -28,7 +28,7 @@ def logoutview(request):
 
 def loginview(request):
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("mitra/mitra.html")
     else:
         return render(request,"loginsiam.html")
     
