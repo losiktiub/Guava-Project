@@ -390,17 +390,17 @@
                                     {% csrf_token %}
                                     <div class="mb-3">
                                         <label for="exampleInputPassword1" class="form-label">Nama Mitra</label>
-                                        <select class="form-control" id="exampleInputEmail1" name="id_panen">
-                                            {% for item in datapanen %}
-                                            <option value="{{item.id_panen}}">{{item.id_mitra}}</option>
+                                        <select class="form-control" id="exampleInputEmail1" name="id_mitra">
+                                            {% for item in datamitra %}
+                                            <option value="{{item.id_mitra}}">{{item.nama_mitra}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="exampleInputPassword1" class="form-label">Nama Komoditas</label>
-                                        <select class="form-control" id="exampleInputEmail1" name="id_komoditas">
+                                        <label for="exampleInputPassword1" class="form-label">Nama Komoditas - Grade</label>
+                                        <select class="form-control" id="exampleInputEmail1" name="id_detailkomoditas">
                                             {% for item in datakomoditas %}
-                                            <option value="{{item.id_komoditas}}">{{item.nama_komoditas}}</option>
+                                            <option value="{{item.id_detailkomoditas}}">{{item.id_komoditas}} - {{ item.id_grade.nama_grade }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -408,6 +408,11 @@
                                         <label for="exampleInputEmail1" class="form-label">Jumlah Panen</label>
                                         <input required type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
                                         name="jumlahpanen">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Tanggal Panen</label>
+                                        <input required type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 
+                                        name="tanggal_panen">
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Tanggal Kadaluwarsa</label>

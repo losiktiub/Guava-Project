@@ -389,13 +389,13 @@
                             <!-- <form action="" method="post"> -->
                                 {% csrf_token %}
                                 <div class="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">Nama Pembeli</label>
+                                    <label for="exampleInputPassword1" class="form-label">Tanggal Pembelian</label>
                                     <select class="form-control" id="exampleFormControlSelect1" name="id_penjualan">
                                         {% for item in datapenjualan %}
                                             {% if item.id_penjualan == detailjualobj.id_penjualan.id_penjualan %}
-                                                <option selected value="{{ item.id_penjualan }}">{{ item.idpembeli.nama_pembeli }}</option>
+                                                <option selected value="{{ item.id_penjualan }}">{{ item.tanggalpenjualan }}</option>
                                             {% else %}
-                                                <option value="{{ item.id_penjualan }}">{{ item.idpembeli.nama_pembeli }}</option>
+                                                <option value="{{ item.id_penjualan }}">{{ item.tanggalpenjualan }}</option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>

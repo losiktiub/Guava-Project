@@ -392,7 +392,6 @@
                                     <thead>
                                         <tr>
                                             <th>ID Penjualan</th>
-                                            <th>Nama Pembeli</th>
                                             <th>Tanggal Penjualan</th>
                                             <th>Action</th>        
                                         </tr>
@@ -401,7 +400,6 @@
                                         {% for item in penjualanobj %}
                                         <tr>
                                             <td>{{ item.id_penjualan  }}</td>
-                                            <td>{{ item.idpembeli.nama_pembeli  }}</td>
                                             <td>{{ item.tanggalpenjualan}}</td>
                                             <td>
                                                 <a href="{% url 'updatepenjualan' item.id_penjualan %}"><button class="btn btn-warning">Update</button></a>

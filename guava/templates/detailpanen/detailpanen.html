@@ -394,8 +394,9 @@
                                             <th>ID Detail Panen</th>
                                             <th>ID Panen</th>
                                             <th>Nama Mitra</th>
-                                            <th>Nama Komoditas</th>
+                                            <th>Nama Komoditas - Grade</th>
                                             <th>Jumlah Panen</th>
+                                            <th>Tanggal Panen</th>
                                             <th>Tanggal Kadaluwarsa</th>
                                             <th>Action</th>        
                                         </tr>
@@ -406,8 +407,9 @@
                                             <td>{{ item.id_detailpanen }}</td>
                                             <td>{{ item.idpanen_id }}</td>
                                             <td>{{ item.idpanen }}</td>
-                                            <td>{{ item.idkomoditas}}</td>
+                                            <td>{{ item.id_detailkomoditas}} - {{ item.id_detailkomoditas.id_grade}} </td>
                                             <td>{{ item.jumlahpanen}}</td>
+                                            <td>{{item.idpanen.tanggal_panen}}</td>
                                             <td>{{ item.tanggalkadaluwarsa}}</td>
                                             <td>
                                                 <a href="{% url 'updatedetailpanen' item.id_detailpanen %}"><button class="btn btn-warning">Update</button></a>

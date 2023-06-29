@@ -388,14 +388,7 @@
                             <form method="post" id="createpenjualan">
                                 <!-- <form action="" method="post"> -->
                                     {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="exampleInputPassword1" class="form-label">Nama Pembeli</label>
-                                        <select class="form-control" id="exampleInputEmail1" name="idpembeli">
-                                            {% for item in datapembeli %}
-                                            <option value="{{item.id_pembeli}}">{{item.nama_pembeli}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                    
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Tanggal Penjualan</label>
                                         <input required type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" 

@@ -18,10 +18,6 @@ urlpatterns = [
     path('mitra/createmitra', views.create_mitra,name='createmitra'),
     path('mitra/updatemitra/<str:id>', views.update_mitra,name='updatemitra'),
     path('deletemitra/<str:id>', views.delete_mitra,name='deletemitra'),
-    path('pembeli/', views.pembeli,name='pembeli'),
-    path('pembeli/createpembeli', views.create_pembeli,name='createpembeli'),
-    path('pembeli/updatepembeli/<str:id>', views.update_pembeli,name='updatepembeli'),
-    path('deletepembeli/<str:id>', views.delete_pembeli,name='deletepembeli'),
     path('detailjual/', views.detail_jual,name='detailjual'),
     path('detailjual/createdetailjual', views.create_detail_jual,name='createdetailjual'),
     path('detailjual/updatedetailjual/<str:id>', views.update_detail_jual,name='updatedetailjual'),
@@ -42,9 +38,11 @@ urlpatterns = [
     path('panen/createpanen', views.create_panen,name='createpanen'),
     path('panen/updatepanen/<str:id>', views.update_panen,name='updatepanen'),
     path('deletepanen/<str:id>', views.delete_panen,name='deletepanen'),
-
-
-
+    path('grade/', views.grade,name='grade'),
+    path('detailkomoditas/', views.detailkomoditas,name='detailkomoditas'),
+    path('detailkomoditas/createdetailkomoditas', views.create_detailkomoditas,name='createdetailkomoditas'),
+    path('detailkomoditas/updatedetailkomoditas/<str:id>', views.update_detailkomoditas,name='updatedetailkomoditas'),
+    path('deletedetailkomoditas/<str:id>', views.delete_detailkomoditas,name='deletedetailkomoditas'),
 
 
 

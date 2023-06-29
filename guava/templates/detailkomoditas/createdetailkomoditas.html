@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>UPDATE OBAT</title>
+    <title>ADD OBAT</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -145,6 +145,7 @@
                     </div>
                 </div>
             </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -368,12 +369,12 @@
 
                 </nav>
                 <!-- End of Topbar -->
-
+                                
                 <!-- Begin Page Content -->
-                <div class="container-sm">
+                    <div class="container-sm">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Update Data Mitra</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Add Obat</h1>
                     <!-- <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
                         For more information about DataTables, please visit the <a target="_blank"
                             href="https://datatables.net">official DataTables documentation</a>.</p> -->
@@ -381,37 +382,37 @@
                     <!-- Form -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Spesifikasi Mitra</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Spesifikasi Obat</h6>
                         </div>
                         <div class="card-body">
-                            <form method="post" id="updateobat">
+                            <form method="post" id="createmitra">
                             <!-- <form action="" method="post"> -->
                                 {% csrf_token %}
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Nama Pembeli</label>
-                                    <input required type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nama_pembeli"
-                                    value="{{ pembeliobj.nama_pembeli }}">
+                                    <label for="exampleInputPassword1" class="form-label">Nama Komoditas</label>
+                                    <select class="form-control" id="exampleInputEmail1" name="id_komoditas">
+                                        {% for item in datakomoditas %}
+                                        <option value="{{item.id_komoditas}}">{{item.nama_komoditas}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">Nomor Pembeli</label>
-                                    <input required type="number" class="form-control" id="exampleFormControlSelect1" name="nomor_pembeli"
-                                    value="{{ pembeliobj.nomor_pembeli }}">
-                                        <!-- <option selected value="Obat Bebas">Obat Bebas</option>
-                                        <option value="Obat Bebas Terbatas">Obat Bebas Terbatas</option>
-                                        <option value="Obat Keras">Obat Keras</option> -->
-                                        </input>
+                                    <label for="exampleInputPassword1" class="form-label">Grade</label>
+                                    <select class="form-control" id="exampleInputEmail1" name="id_grade">
+                                        {% for item in datagrade %}
+                                        <option value="{{item.id_grade}}">{{item.nama_grade}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Alamat Pembeli</label>
-                                    <input class="form-control" id="exampleFormControlSelect1" name="alamat_pembeli"
-                                    value="{{ pembeliobj.alamat_pembeli }}">
-                                        <!-- <option selected value="Pcs">Pcs</option>
-                                        <option value="Botol">Botol</option>
-                                        <option value="Box">Box</option> -->
-                                        </input>
+                                    <label for="exampleInputPassword1" class="form-label">Harga Beli</label>
+                                    <input required type="number" class="form-control" id="exampleFormControlSelect1" name="harga_beli"></input>
                                 </div>
-                                
-                                <button type="submit" class="btn btn-secondary">Update</button>
+                                <div class="mb-3">
+                                    <label for="exampleInputPassword1" class="form-label">Harga Jual</label>
+                                    <input required type="number" class="form-control" id="exampleFormControlSelect1" name="harga_jual"></input>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Submit</button>
                             </form>
                         </div>
                     </div>

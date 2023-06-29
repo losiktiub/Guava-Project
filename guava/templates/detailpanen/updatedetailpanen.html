@@ -385,28 +385,28 @@
                             <h6 class="m-0 font-weight-bold text-primary">Data Pembelian</h6>
                         </div>
                         <div class="card-body">
-                            <form method="post" id="updatepembelian">
+                            <form method="post" id="updatedetailpanen">
                                 {% csrf_token %}
-                                <div class="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">Nama Mitra</label>
-                                    <select class="form-control" id="exampleFormControlSelect1" name="id_panen">
-                                        {% for item in datapanen %}
-                                            {% if item.id_panen == alldetailpanen.idpanen_id %}
-                                                <option selected value="{{ item.id_panen }}">{{ item.id_mitra }}</option>
-                                            {% else %}
-                                                <option value="{{ item.id_panen }}">{{ item.id_mitra }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">Nama Mitra</label>
+                                        <select class="form-control" id="exampleFormControlSelect1" name="id_mitra">
+                                            {% for item in datamitra %}
+                                                {% if item.id_mitra == alldetailpanen.idpanen.id_mitra_id %}
+                                                    <option selected value="{{ item.id_mitra }}">{{ item.nama_mitra }}</option>
+                                                {% else %}
+                                                    <option value="{{ item.id_mitra }}">{{ item.nama_mitra }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 <div class="mb-3">
                                     <label for="exampleInputPassword1" class="form-label">Nama Komoditas</label>
-                                    <select class="form-control" id="exampleFormControlSelect1" name="id_komoditas">
+                                    <select class="form-control" id="exampleFormControlSelect1" name="id_detailkomoditas">
                                         {% for item in datakomoditas %}
-                                            {% if item.id_komoditas == alldetailpanen.idkomoditas_id %}
-                                                <option selected value="{{ item.id_komoditas }}">{{ item.nama_komoditas }}</option>
+                                            {% if item.id_detailkomoditas == alldetailpanen.id_detailkomoditas_id %}
+                                                <option selected value="{{ item.id_detailkomoditas }}">{{ item.id_komoditas.nama_komoditas }} - {{ item.id_grade.nama_grade}}</option>
                                             {% else %}
-                                                <option value="{{ item.id_komoditas }}">{{ item.nama_komoditas }}</option>
+                                                <option value="{{ item.id_detailkomoditas }}">{{ item.id_komoditas.nama_komoditas }} - {{ item.id_grade.nama_grade}}</option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>
@@ -416,11 +416,16 @@
                                     <input required type="number" class="form-control" id="exampleFormControlSelect1" name="jumlahpanen" value="{{ alldetailpanen.jumlahpanen }}">
                                 </div>
                                 <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Tanggal Panen</label>
+                                    <input required type="date" class="form-control" id="exampleFormControlSelect1" name="tanggal_panen" value="{{ alldetailpanen.idpanen.tanggal_panen|date:'Y-m-d' }}">
+                                </div>
+                                <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Tanggal Kadaluwarsa</label>
                                     <input required type="date" class="form-control" id="exampleFormControlSelect1" name="tanggalkadaluwarsa" value="{{ tanggal }}">
                                 </div>
                                 <button type="submit" class="btn btn-secondary">Update</button>
                             </form>
+                            
                             
                         </div>
                     </div>

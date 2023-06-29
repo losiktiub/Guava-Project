@@ -394,7 +394,6 @@
                                         <tr>
                                             <th>ID Panen</th>
                                             <th>ID Mitra</th>
-                                            <th>Biaya Pembelian</th>
                                             <th>Tanggal Panen</th>
                                             <th>Action</th>        
                                         </tr>
@@ -404,7 +403,6 @@
                                         <tr>
                                             <td>{{ item.id_panen  }}</td>
                                             <td>{{ item.id_mitra  }}</td>
-                                            <td>{{ item.biaya_pembelian }}</td>
                                             <td>{{ item.tanggal_panen }}</td>
                                             <td>
                                                 <a href="{% url 'updatepanen' item.id_panen %}"><button class="btn btn-warning">Update</button></a>

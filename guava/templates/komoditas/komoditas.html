@@ -394,9 +394,6 @@
                                         <tr>
                                             <th>ID Komoditas</th>
                                             <th>Nama Komoditas</th>
-                                            <th>Satuan</th>
-                                            <th>Kode Grade</th>
-                                            <th>Harga Sewa</th>
                                             <th>Action</th>        
                                         </tr>
                                     </thead>
@@ -405,10 +402,6 @@
                                         <tr>
                                             <td>{{ item.id_komoditas  }}</td>
                                             <td>{{ item.nama_komoditas  }}</td>
-                                            <td>{{ item.satuan }}</td>
-                                            <td>{{ item.kode_grade }}</td>
-                                            <td>{{ item.harga_sewa }}</td>
-                                            
                                             <td>
                                                 <a href="{% url 'updatekomoditas' item.id_komoditas %}"><button class="btn btn-warning">Update</button></a>
                                                 <a href="{% url 'deletekomoditas' item.id_komoditas %}"><button class="btn btn-danger">Delete</button></a>
